@@ -51,7 +51,7 @@ export default {
       //   /^(([.](?=[^.]|^))|[\w_%{|}#$~`+!?-])+@(?:[\w-]+\.)+[a-zA-Z.]{2,63}$/;
       if (this.code == "") {
         this.codeError = true;
-        this.codeErrMsg = "請填入信箱!";
+        this.codeErrMsg = "請填入員編!";
         // } else if (!re.test(this.code)) {
         //   this.codeError = true;
         //   this.codeErrMsg = "格式錯誤！";
