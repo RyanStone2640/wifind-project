@@ -93,7 +93,7 @@ export default {
             // console.log(res.data);
             alert(`您好，${res.data.ReturnData[0].username}`);
             this.$store.commit("addUserInformation", res.data.ReturnData);
-            return this.$router.push("/CheckIn");
+            return this.$router.push("/table");
             // if (res.data.message) {
             //   alert(`您好，${res.data.ReturnData[0].username}`);
             //   this.$store.commit(
