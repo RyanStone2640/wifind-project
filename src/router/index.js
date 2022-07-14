@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeComponent from '../components/HomeComponent.vue';
-import CheckInComponent from '../components/CheckInComponent.vue';
+import TableComponent from '../components/TableComponent.vue';
+import ChartComponent from '../components/ChartComponent.vue';
+
 const routes = [
   {
     path: '/',
@@ -8,9 +10,14 @@ const routes = [
     component: HomeComponent,
   },
   {
-    path: '/CheckIn',
-    name:'CheckIn',
-    component:CheckInComponent
+    path: '/table',
+    name:'table',
+    component:TableComponent
+  },
+  {
+    path: '/chart',
+    name:'chart',
+    component:ChartComponent
   }
 ];
 const router = createRouter({
