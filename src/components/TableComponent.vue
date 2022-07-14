@@ -1,61 +1,13 @@
 <template>
-  <div class="leftBar">
-    <div class="wifindText">WIFind 打卡系統</div>
-    <div class="nameText">
-      <p>使用者：{{ userInformation[0].username }}</p>
-    </div>
-    <div class="buttonGroup">
-      <button @click="">表格</button>
-      <button>圖表</button>
-      <!-- <button>部門Ａ</button>
-      <button>部門Ｂ</button>
-      <button>部門Ｃ</button> -->
-    </div>
-  </div>
+	<Sidebar></Sidebar>
   <div class="rightBar">
-    <div class="topBar">
-      <button class="logoutBtn" @click="logOut()">登出</button>
-    </div>
-    <br />
+  	<Navbar></Navbar>
     <h2 class="nameBar">
       目前顯示： {{ userInformation[0].username }} 出勤紀錄
     </h2>
     <div class="searchBar">
       <p class="recordNumber">共 {{ userInformation.length }} 筆紀錄</p>
       <div class="searchInput">
-        <!-- <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            日期
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li v-for="data in filterDate">
-              <a class="dropdown-item" href="#">{{ data }}</a>
-            </li>
-          </ul>
-        </div>
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton1"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            v-show="userInformation[0].status == 1"
-          >
-            姓名
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li v-for="data in filterUserName">
-              <a class="dropdown-item" href="#">{{ data }}</a>
-            </li>
-          </ul>
-        </div> -->
         <div class="dropdown">
           <select class="btn btn-secondary p-1" v-model="selectData">
             <option selected value="全部">全部日期</option>
@@ -95,6 +47,9 @@
 </template>
 
 <script>
+import Sidebar from "./baseCopmponents/Sidebar.vue"
+import Navbar from "./baseCopmponents/Navbar.vue"
+
 export default {
   data() {
     return {
@@ -105,6 +60,10 @@ export default {
       selectData: "全部",
       selectName: "全部",
     };
+  },
+  components: {
+  	Sidebar,
+  	Navbar
   },
   computed: {
     userInformation() {
@@ -167,57 +126,18 @@ export default {
     },
   },
   mounted() {
-    console.log(this.userInformation);
   },
 };
 </script>
 
 <style scoped>
-.leftBar {
-  width: 350px;
-  height: 100%;
-  border-right: solid 2px #d9d9d9;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-top: 36px;
-}
-.wifindText {
-  letter-spacing: 2px;
-  font-size: 32px;
-  font-weight: 600;
-  color: #5891e5;
-}
-.nameText {
-  margin-top: 45px;
-  color: #5891e5;
-  font-weight: 500;
-}
-.buttonGroup {
-  display: block;
-  margin-top: 60px;
-  text-align: right;
-}
-.buttonGroup button {
-  width: 300px;
-  background-color: #fff;
-  padding: 20px;
-  border: solid 2px #d9d9d9;
-  border-right: none;
-}
+
 .rightBar {
   position: absolute;
   left: 350px;
   width: calc(100% - 380px);
   margin-left: 30px;
   padding-right: 30px;
-}
-.topBar {
-  border-bottom: solid 2px #d9d9d9;
-  text-align: right;
-  margin-top: -50px;
-  margin-left: -30px;
-  margin-right: -30px;
 }
 .nameBar {
   font-size: 20px;
@@ -238,14 +158,6 @@ export default {
   border: solid 1px black;
   max-height: 468px;
   overflow: auto;
-}
-.logoutBtn {
-  width: 85px;
-  height: 35px;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  border: solid 1px #d9d9d9;
-  background-color: #f1f7ff;
 }
 table {
   border: 0;
