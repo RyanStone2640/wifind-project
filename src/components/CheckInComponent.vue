@@ -84,10 +84,10 @@
           <th>下班</th>
         </tr>
         <tr v-for="data in selectUserInformation">
-        		<td>{{ data.date }}</td>
-		        <td>{{ data.username }}</td>
-		        <td>{{ data.time }}</td>        		
-		        <td>{{ data.time }}</td>       	
+          <td>{{ data.date }}</td>
+          <td>{{ data.username }}</td>
+          <td>{{ data.inTime }}</td>
+          <td>{{ data.outTime }}</td>
         </tr>
       </table>
     </div>
@@ -103,7 +103,7 @@ export default {
       username: [],
       filterUserName: [],
       selectData: "全部",
-			selectName: "全部"
+      selectName: "全部",
     };
   },
   computed: {
@@ -130,37 +130,35 @@ export default {
         (ele, pos) => this.username.indexOf(ele) == pos
       );
       // console.log(filteredName);
-      this.filterUserName = filteredName
+      this.filterUserName = filteredName;
       // const objName = Object.assign({}, filteredName);
       // // console.log(objName);
       // this.filterUserName = objName;
       return this.$store.state.userInformation;
     },
-    selectUserInformation(){
-    	let vm = this;
-    	let result
+    selectUserInformation() {
+      let vm = this;
+      let result;
 
-    	if(vm.selectData == '全部' && vm.selectName == '全部'){
-  			result = vm.userInformation.filter(item => {
-  			  return item})
-  		}
-
-    	else if(vm.selectData !== '全部' && vm.selectName == '全部'){
-  			result = vm.userInformation.filter(item => {
-  			  return item.date == vm.selectData})
-			}
-
-    	else if(vm.selectName !== '全部' && vm.selectData == '全部'){
-  			result = vm.userInformation.filter(item => {
-  			  return item.username == vm.selectName})
-  		}
-    	else{
-  			result = vm.userInformation.filter(item => {
-  			  return item.date == vm.selectData && item.username == vm.selectName
-  			})    		
-    	}
-    	return result
-    }
+      if (vm.selectData == "全部" && vm.selectName == "全部") {
+        result = vm.userInformation.filter((item) => {
+          return item;
+        });
+      } else if (vm.selectData !== "全部" && vm.selectName == "全部") {
+        result = vm.userInformation.filter((item) => {
+          return item.date == vm.selectData;
+        });
+      } else if (vm.selectName !== "全部" && vm.selectData == "全部") {
+        result = vm.userInformation.filter((item) => {
+          return item.username == vm.selectName;
+        });
+      } else {
+        result = vm.userInformation.filter((item) => {
+          return item.date == vm.selectData && item.username == vm.selectName;
+        });
+      }
+      return result;
+    },
   },
   methods: {
     logOut() {
@@ -168,9 +166,9 @@ export default {
       return this.$router.push("/");
     },
   },
-  mounted(){
-  	console.log(this.userInformation)
-  }
+  mounted() {
+    console.log(this.userInformation);
+  },
 };
 </script>
 
