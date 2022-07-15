@@ -16,6 +16,10 @@
 	  mounted(){
 	  },	  
 	  methods: {
+	  	logOut() {
+				this.$store.commit("clearInformation");
+				return this.$router.push("/");
+		}	  	
 	  }
 	} 
 </script>
