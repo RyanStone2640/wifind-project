@@ -6,12 +6,12 @@
       <!-- userInformation[0].username -->
     </div>
     <div class="buttonGroup">
-    	<router-link to="/table" class="btn-style">
+    	<button class="btn-style" @click="toTable">
     		表格
-    	</router-link>
-    	<router-link to="/chart">
+    	</button>
+    	<button class="btn-style" @click="toChart">
     		圖表
-    	</router-link>    	
+    	</button>    	
     </div>
   </div>	
 </template>
@@ -27,6 +27,12 @@
 	  mounted(){
 	  },	  
 	  methods: {
+	  	toTable(){
+	  		this.$router.push("/table");
+	  	},
+	  	toChart(){
+	  		this.$router.push("/chart");
+	  	}	  	
 	  }
 	} 
 </script>

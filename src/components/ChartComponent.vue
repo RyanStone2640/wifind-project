@@ -3,96 +3,151 @@
   <div class="rightBar">
   	<Navbar></Navbar>
     <h2 class="nameBar">
-      目前顯示： {{ userInformation[0].username }} 出勤紀錄
+      <!-- 目前顯示： {{ userInformation }} 出勤紀錄 -->
     </h2>
+		<!-- chart -->
+		<div class="content-box overall-box chartContainer">
+			<v-chart class="chartHeight" :option="barchart" autoresize />
+			<v-chart class="chartHeight" :option="piechart" autoresize/>  	
+		</div>     
   </div>
+
+  <!-- <div>{{ userInformation }}</div> -->
 </template>
 
-<script>
+<script setup>
+import VChart from "vue-echarts";	
 import Sidebar from "./baseCopmponents/Sidebar.vue"
 import Navbar from "./baseCopmponents/Navbar.vue"
 
-export default {
-  data() {
-    return {
-      date: [],
-      filterDate: [],
-      username: [],
-      filterUserName: [],
-      selectData: "全部",
-      selectName: "全部",
-    };
-  },
-  components: {
-  	Sidebar,
-  	Navbar
-  },
-  computed: {
-    userInformation() {
-      // console.log(this.$store.state.userInformation);
-      for (let i = 0; i < this.$store.state.userInformation.length; i++) {
-        this.date.push(this.$store.state.userInformation[i].date);
-      }
-      // console.log(this.date);
-      const filteredArray = this.date.filter(
-        (ele, pos) => this.date.indexOf(ele) == pos
-      );
-      this.filterDate = filteredArray.sort();
-      // console.log(filteredArray);
-      // const obj = Object.assign({}, filteredArray.sort());
-      // // console.log(obj);
-      // this.filterDate = obj;
+import {ref, onMounted, computed} from "vue"
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-      for (let i = 0; i < this.$store.state.userInformation.length; i++) {
-        this.username.push(this.$store.state.userInformation[i].username);
-      }
-      // console.log(this.username);
-      const filteredName = this.username.filter(
-        (ele, pos) => this.username.indexOf(ele) == pos
-      );
-      // console.log(filteredName);
-      this.filterUserName = filteredName;
-      // const objName = Object.assign({}, filteredName);
-      // // console.log(objName);
-      // this.filterUserName = objName;
-      return this.$store.state.userInformation;
-    },
-    selectUserInformation() {
-      let vm = this;
-      let result;
+// vuex
+const store = useStore();
+// vue-router
+const router = useRouter();
 
-      if (vm.selectData == "全部" && vm.selectName == "全部") {
-        result = vm.userInformation.filter((item) => {
-          return item;
-        });
-      } else if (vm.selectData !== "全部" && vm.selectName == "全部") {
-        result = vm.userInformation.filter((item) => {
-          return item.date == vm.selectData;
-        });
-      } else if (vm.selectName !== "全部" && vm.selectData == "全部") {
-        result = vm.userInformation.filter((item) => {
-          return item.username == vm.selectName;
-        });
-      } else {
-        result = vm.userInformation.filter((item) => {
-          return item.date == vm.selectData && item.username == vm.selectName;
-        });
-      }
-      return result;
-    },
+const date = ref([]);
+
+const filterDate = ref([]);
+
+const username =  ref([]);
+
+const filterUserName =  ref([]);
+
+const selectData =  ref("全部");
+
+const selectName =  ref("全部");
+
+// chart
+const barchart = ref({
+  title: {
+    text: '出席狀況',
+		textStyle: {
+		    color: '#558ABA'
+		}
   },
-  methods: {
-    logOut() {
-      this.$store.commit("clearInformation");
-      return this.$router.push("/");
-    },
+  tooltip: {},
+  legend: {
+  	left: "right",
   },
-  mounted() {
+  xAxis: {
+    data: [],
+    nameTextStyle: {
+    	fontWeight: "bolder"
+    }
   },
-};
+  yAxis: {
+		nameTextStyle: {
+    	fontWeight: "bolder"
+    }
+  },
+  series: [
+    {
+    	name: '到班時數',
+      data: [5, 2, 7, 5, 5,5, 2, 7, 5, 5],
+      type: 'bar',
+      itemStyle: {
+				color: '#558ABA'
+      },
+    }
+  ],	  		
+})
+const piechart = ref({
+  title: {
+    text: "本月整體出勤狀況",
+		textStyle: {
+		    color: '#558ABA'
+		}
+  },
+  tooltip: {
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)"
+  },
+  legend: {
+    orient: "vertical",
+    left: "right",
+    data: ["正常到班", "遲到數", "缺勤"]
+  },
+  series: [
+    {
+      name: "本月整體出勤狀況",
+      type: "pie",
+      radius: "55%",
+      center: ["50%", "60%"],
+      data: [
+        { value: 335, name: "正常到班" },
+        { value: 310, name: "遲到數" },
+        { value: 234, name: "缺勤" },
+      ],
+      itemStyle : {
+        normal : {
+             label : {
+                show: true, position: 'inner',
+                formatter : "{d}%"
+            },
+            labelLine : {
+                show : false
+            }
+        }
+      },      
+    }
+  ]
+});
+
+onMounted(()=>{
+	 // console.log(this.$store.state.userInformation);
+	for (let i = 0; i < store.state.userInformation.length; i++) {
+	  date.value.push(store.state.userInformation[i].date);
+	}
+	// console.log(this.date);
+	const filteredArray = date.value.filter(
+	  (ele, pos) => date.value.indexOf(ele) == pos
+	);
+	
+	filterDate.value = filteredArray.sort();
+	
+	// set data in chart
+	filterDate.value.forEach(function(item, index){
+		barchart.value.xAxis.data.push(item)
+	})
+
+	for (let i = 0; i < store.state.userInformation.length; i++) {
+		username.value.push(store.state.userInformation[i].username);
+	}
+	// console.log(this.username);
+	const filteredName = username.value.filter(
+	  (ele, pos) => username.value.indexOf(ele) == pos
+	);
+	// console.log(filteredName);
+	filterUserName.value = filteredName;
+	console.log(store.state.userInformation);
+})
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .rightBar {
   position: absolute;
@@ -142,4 +197,16 @@ td {
   padding: 8px;
   color: #757575;
 }
+
+
+.overall-box{
+  width: auto;
+  height: auto;
+}	
+.chartContainer{
+	height: 100vh;
+	.chartHeight{
+		height: 100%
+	}
+}	
 </style>
