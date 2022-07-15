@@ -120,10 +120,7 @@ export default {
     },
   },
   methods: {
-    logOut() {
-      this.$store.commit("clearInformation");
-      return this.$router.push("/");
-    },
+
   },
   mounted() {
   },
@@ -131,7 +128,6 @@ export default {
 </script>
 
 <style scoped>
-
 .rightBar {
   position: absolute;
   left: 350px;
