@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeComponent from '../components/HomeComponent.vue';
-import TableComponent from '../components/TableComponent.vue';
-import ChartComponent from '../components/ChartComponent.vue';
+import HomeView from '../views/HomeView.vue';
+import TableView from '../views/TableView.vue';
+import ChartView from '../views/ChartView.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeComponent,
+    component: HomeView,
   },
   {
     path: '/table',
     name:'table',
-    component:TableComponent
+    component:TableView
   },
   {
     path: '/chart',
     name:'chart',
-    component:ChartComponent
+    component:ChartView
   }
 ];
 const router = createRouter({

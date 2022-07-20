@@ -3,7 +3,7 @@ import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
-    userInformation: "",
+    userInformation: {},
   },
   getters: {},
   mutations: {

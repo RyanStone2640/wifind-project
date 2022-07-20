@@ -5,6 +5,7 @@ import store from "./store";
 import ECharts from 'vue-echarts'
 import { use } from "echarts/core"
 
+// echart
 import {
   CanvasRenderer
 } from 'echarts/renderers'
@@ -29,5 +30,10 @@ use([
 	LegendComponent
 ])
 
-createApp(App).use(router).use(store).component('v-chart', ECharts)
+// table
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
+createApp(App).use(router).use(store).component('v-chart', ECharts).use(VXETable)
 .mount("#app");

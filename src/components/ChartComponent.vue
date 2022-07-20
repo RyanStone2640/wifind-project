@@ -5,6 +5,10 @@
     <h2 class="nameBar">
       <!-- 目前顯示： {{ userInformation }} 出勤紀錄 -->
     </h2>
+		
+	  <!-- overall -->
+	  <Overall :parent-data="userAttendanceData"></Overall>  
+
 		<!-- chart -->
 		<div class="content-box overall-box chartContainer">
 			<v-chart class="chartHeight" :option="barchart" autoresize />
@@ -19,6 +23,7 @@
 import VChart from "vue-echarts";	
 import Sidebar from "./baseCopmponents/Sidebar.vue"
 import Navbar from "./baseCopmponents/Navbar.vue"
+import Overall from "./baseCopmponents/overall.vue";
 
 import {ref, onMounted, computed} from "vue"
 import { useStore } from 'vuex';
@@ -116,7 +121,6 @@ const piechart = ref({
     }
   ]
 });
-
 onMounted(()=>{
 	 // console.log(this.$store.state.userInformation);
 	for (let i = 0; i < store.state.userInformation.length; i++) {
@@ -145,6 +149,31 @@ onMounted(()=>{
 	filterUserName.value = filteredName;
 	console.log(store.state.userInformation);
 })
+
+// overall
+const userAttendanceData = ref([
+	{
+		title: "出席率",
+		number: "98%",
+		color: "#558ABA"
+	},
+	{
+		title: "遲到率",
+		number: "5%",
+		color: "#1AAF68"
+	},
+	{
+		title: "缺席率",
+		number: "5%",
+		color: "#1AAF68"
+	},
+	{
+		title: "請假率",
+		number: "5%",
+		color: "#1AAF68"
+	}
+]);
+
 </script>
 
 <style lang="scss" scoped>
