@@ -29,7 +29,7 @@
   border-bottom: solid 2px #d9d9d9;
   text-align: right;
   margin-top: -50px;
-  margin-left: -30px;
+  margin-left: -80px;
   margin-right: -30px;
 }	
 

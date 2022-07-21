@@ -2,7 +2,7 @@
   <div class="leftBar">
     <div class="wifindText">WIFind 打卡系統</div>
     <div class="nameText">
-      <p>使用者：{{  }}</p>
+      <p>使用者：{{ 'Ryan' }}</p>
       <!-- userInformation[0].username -->
     </div>
     <div class="buttonGroup">
@@ -37,9 +37,9 @@
 	} 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .leftBar {
-  width: 350px;
+  width: 300px;
   height: 100%;
   border-right: solid 2px #d9d9d9;
   position: absolute;
@@ -64,11 +64,16 @@
   text-align: right;
 }
 .buttonGroup .btn-style {
-  width: 300px;
+  // width: 300px;
+  width: 100%;
   background-color: #fff;
   padding: 20px;
   border: solid 2px #d9d9d9;
   border-right: none;
+  &:hover{
+    color: #fff;
+    background-color: rgb(26, 68, 205);
+  }
 }	
 </style>
 
