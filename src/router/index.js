@@ -6,12 +6,12 @@ import ChartView from '../views/ChartView.vue';
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Homeviwe',
     component: HomeView,
   },
   {
     path: '/table',
-    name:'table',
+    name:'tableview',
     component:TableView,
 	  meta: { 
 	    keepAlive: true, 
@@ -19,7 +19,7 @@ const routes = [
   },
   {
     path: '/chart',
-    name:'chart',
+    name:'chartview',
     component:ChartView
   }
 ];

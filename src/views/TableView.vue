@@ -1,7 +1,7 @@
 <script>
 import TableComponent from "../components/TableComponent.vue";
 export default {
-	name: 'table',
+	name: 'TableView',
   components: {
     TableComponent,
   },
