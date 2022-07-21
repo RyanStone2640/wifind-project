@@ -2,35 +2,38 @@
 	<Sidebar></Sidebar>
   <div class="rightBar">
   	<Navbar></Navbar>
-    <h2 class="nameBar">
-      目前顯示： {{ $store.state.userInformation.username }} 出勤紀錄
-    </h2>
-    <div class="searchBar">
-      <p class="recordNumber">共 {{ tableData.length}} 筆紀錄</p>
-      <div class="searchInput">
-        <div class="dropdown">
-          <select class="btn btn-secondary p-1" v-model="selectData">
-            <option selected value="全部">全部日期</option>
-            <option v-for="data in filterDate" :value="data">
-              {{ data }}
-            </option>
-          </select>
-        </div>
-        <div class="dropdown"  v-show="$store.state.userInformation.status == 1" >
-          <select class="btn btn-secondary p-1" v-model="selectName">
-            <option value="全部" selected>全部姓名</option>
-            <option v-for="data in filterUserName" :value="data">
-              {{ data }}
-            </option>
-          </select>
+    <div class="container">
+      <h2 class="nameBar">
+        目前顯示： {{ $store.state.userInformation.username }} 出勤紀錄
+      </h2>
+      <div class="searchBar">
+        <p class="recordNumber">共 {{ tableData.length}} 筆紀錄</p>
+        <div class="searchInput">
+          <div class="dropdown">
+            <select class="btn btn-secondary p-1" v-model="selectData">
+              <option selected value="全部">全部日期</option>
+              <option v-for="data in filterDate" :value="data">
+                {{ data }}
+              </option>
+            </select>
+          </div>
+          <div class="dropdown"  v-show="$store.state.userInformation.status == 1" >
+            <select class="btn btn-secondary p-1" v-model="selectName">
+              <option value="全部" selected>全部姓名</option>
+              <option v-for="data in filterUserName" :value="data">
+                {{ data }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
+      <div class="mainTable">
+        <vxe-table :data="selectTableData" class="tableInfo" emptyText="no data">
+          <vxe-column v-for="(data, index) of tableTitle"  :field="data.field" :title="data.title"></vxe-column>
+        </vxe-table>      
+      </div>
     </div>
-    <div class="mainTable">
-		  <vxe-table :data="selectTableData" class="tableInfo" emptyText="no data">
-		    <vxe-column v-for="(data, index) of tableTitle"  :field="data.field" :title="data.title"></vxe-column>
-		  </vxe-table>      
-    </div>
+
   </div> 
 </template>
 
@@ -130,10 +133,13 @@ export default {
 <style scoped>
 .rightBar {
   position: absolute;
-  left: 350px;
-  width: calc(100% - 380px);
-  margin-left: 30px;
-  padding-right: 30px;
+  left: 300px;
+  width: calc(100% - 300px);
+  margin-left: 0;
+  padding-right: 0;
+}
+.container{
+  padding: 0 3rem 0 3rem;
 }
 .nameBar {
   font-size: 20px;

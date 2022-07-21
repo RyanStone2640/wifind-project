@@ -2,20 +2,21 @@
 	<Sidebar></Sidebar>
   <div class="rightBar">
   	<Navbar></Navbar>
-    <h2 class="nameBar">
+    <div class="container">
+      <h2 class="nameBar">
       <!-- 目前顯示： {{ userInformation }} 出勤紀錄 -->
-    </h2>
+      </h2>
 		
-	  <!-- overall -->
-	  <Overall :parent-data="userAttendanceData"></Overall>  
+      <!-- overall -->
+      <Overall :parent-data="userAttendanceData"></Overall>  
 
-		<!-- chart -->
-		<div class="content-box overall-box chartContainer">
-			<v-chart class="chartHeight" :option="barchart" autoresize />
-			<v-chart class="chartHeight" :option="piechart" autoresize/>  	
-		</div>     
+      <!-- chart -->
+      <div class="content-box overall-box chartContainer">
+        <v-chart class="chartHeight" :option="barchart" autoresize />
+        <v-chart class="chartHeight" :option="piechart" autoresize/>  	
+      </div>     
+    </div>
   </div>
-
   <!-- <div>{{ userInformation }}</div> -->
 </template>
 
@@ -153,10 +154,13 @@ const userAttendanceData = ref([
 
 .rightBar {
   position: absolute;
-  left: 350px;
-  width: calc(100% - 380px);
-  margin-left: 30px;
-  padding-right: 30px;
+  left: 300px;
+  width: calc(100% - 300px);
+  margin-left: 0;
+  padding-right: 0;
+}
+.container{
+  padding: 0 3rem ;
 }
 .nameBar {
   font-size: 20px;

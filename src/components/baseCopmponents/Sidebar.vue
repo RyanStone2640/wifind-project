@@ -2,14 +2,14 @@
   <div class="leftBar">
     <div class="wifindText">WIFind 打卡系統</div>
     <div class="nameText">
-      <p>使用者：{{$store.state.userInformation.username   }}</p>
+      <p>使用者：{{$store.state.userInformation.username}}</p>
       <!-- userInformation[0].username -->
     </div>
     <div class="buttonGroup">
-    	<button class="btn-style" @click="toTable">
+    	<button class="btn-style" :class="[$route.path == '/table' ? 'active' : '' ]" @click="toTable">
     		表格
     	</button>
-    	<button class="btn-style" @click="toChart">
+    	<button class="btn-style" :class="[$route.path == '/chart' ? 'active' : '']" @click="toChart">
     		圖表
     	</button>    	
     </div>
@@ -43,38 +43,43 @@
   height: 100%;
   border-right: solid 2px #d9d9d9;
   position: absolute;
-  top: 0;
-  left: 0;
+
   padding-top: 36px;
-}
-.wifindText {
-  letter-spacing: 2px;
-  font-size: 32px;
-  font-weight: 600;
-  color: #5891e5;
-}
-.nameText {
-  margin-top: 45px;
-  color: #5891e5;
-  font-weight: 500;
+  .wifindText {
+    margin-left: 30px;
+    letter-spacing: 2px;
+    font-size: 32px;
+    font-weight: 600;
+    color: #5891e5;
+  }
+  .nameText {
+    margin-left: 30px;
+    margin-top: 45px;
+    color: #5891e5;
+    font-weight: 500;
+  }
 }
 .buttonGroup {
   display: block;
   margin-top: 60px;
   text-align: right;
-}
-.buttonGroup .btn-style {
-  // width: 300px;
-  width: 100%;
-  background-color: #fff;
-  padding: 20px;
-  border: solid 2px #d9d9d9;
-  border-right: none;
-  &:hover{
-    color: #fff;
-    background-color: rgb(26, 68, 205);
+  .btn-style {
+    width: 100%;
+    padding: 20px;
+    border: solid 2px #d9d9d9;
+    border-right: none;
+    &:hover{
+      color: #fff;
+      background-color: #5891e5;
+    }
   }
-}	
+}
+
+.active{
+  color: #fff;
+  background-color: #5891e5;
+}
+
 </style>
 
 	
