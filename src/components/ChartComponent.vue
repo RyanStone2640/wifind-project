@@ -121,39 +121,12 @@ const piechart = ref({
     }
   ]
 });
-onMounted(()=>{
-	 // console.log(this.$store.state.userInformation);
-	for (let i = 0; i < store.state.userInformation.length; i++) {
-	  date.value.push(store.state.userInformation[i].date);
-	}
-	// console.log(this.date);
-	const filteredArray = date.value.filter(
-	  (ele, pos) => date.value.indexOf(ele) == pos
-	);
-	
-	filterDate.value = filteredArray.sort();
-	
-	// set data in chart
-	filterDate.value.forEach(function(item, index){
-		barchart.value.xAxis.data.push(item)
-	})
-
-	for (let i = 0; i < store.state.userInformation.length; i++) {
-		username.value.push(store.state.userInformation[i].username);
-	}
-	// console.log(this.username);
-	const filteredName = username.value.filter(
-	  (ele, pos) => username.value.indexOf(ele) == pos
-	);
-	// console.log(filteredName);
-	filterUserName.value = filteredName;
-	console.log(store.state.userInformation);
-})
+onMounted(()=>{})
 
 // overall
 const userAttendanceData = ref([
 	{
-		title: "出席率",
+		title: "出勤率",
 		number: "98%",
 		color: "#558ABA"
 	},
