@@ -2,7 +2,7 @@
   <div class="leftBar">
     <div class="wifindText">WIFind 打卡系統</div>
     <div class="nameText">
-      <p>使用者：{{ 'Ryan' }}</p>
+      <p>使用者：{{$store.state.userInformation.username   }}</p>
       <!-- userInformation[0].username -->
     </div>
     <div class="buttonGroup">

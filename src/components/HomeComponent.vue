@@ -76,42 +76,28 @@ export default {
     },
   },
   methods: {
-    submitAccount() {
+    async submitAccount() {
       let userData = {
         username: this.code,
         passwd: this.password,
       };
-      // console.log(userData);
-
       if (this.codeError === true || this.passwordError === true) {
         alert("輸入資料格式錯誤");
         return false;
-      } else {
-        axios
-          .post("http://34.125.253.73:8080/login", userData)
-          .then((res) => {
-            // console.log(res.data);
-            alert(`您好，${res.data.ReturnData[0].username}`);
-            this.$store.commit("addUserInformation", res.data.ReturnData);
-            return this.$router.push("/table");
-            // if (res.data.message) {
-            //   alert(`您好，${res.data.ReturnData[0].username}`);
-            //   this.$store.commit(
-            //     "addUserName",
-            //     res.data.ReturnData[0].username
-            //   );
-            //   // this.$store.commit("addUserId", res.data.userId);
-            //   return this.$router.push("/CheckIn");
-            // } else if (!res.data.message) {
-            //   alert("錯誤的帳號或密碼!!");
-            //   return this.$router.push("/");
-            // }
-          })
-          .catch((err) => {
-            console.log(err);
-            alert("錯誤的帳號或密碼!!");
-            return this.$router.push("/");
-          });
+      } 
+      else {
+        try{
+        	let {data} = await axios.post("http://34.125.253.73:8080/login", userData)
+	        alert(`您好，${data.ReturnData[0].username}`);
+	        this.$store.commit("addUserInformation",data.ReturnData[0]);
+	        return this.$router.push("/table");        	
+        }
+        catch(err){
+       	  console.log(err);
+        	alert("錯誤的帳號或密碼!!");
+        	this.password = ""
+        	return this.$router.push("/");      	
+        }
       }
     },
   },

@@ -3,10 +3,10 @@
   <div class="rightBar">
   	<Navbar></Navbar>
     <h2 class="nameBar">
-      目前顯示： {{ userInformation[0].username }} 出勤紀錄
+      目前顯示： {{ $store.state.userInformation.username }} 出勤紀錄
     </h2>
     <div class="searchBar">
-      <p class="recordNumber">共 {{ userInformation.length }} 筆紀錄</p>
+      <p class="recordNumber">共 {{ tableData.length}} 筆紀錄</p>
       <div class="searchInput">
         <div class="dropdown">
           <select class="btn btn-secondary p-1" v-model="selectData">
@@ -16,7 +16,7 @@
             </option>
           </select>
         </div>
-        <div class="dropdown" v-show="userInformation[0].status == 1">
+        <div class="dropdown"  v-show="$store.state.userInformation.status == 1" >
           <select class="btn btn-secondary p-1" v-model="selectName">
             <option value="全部" selected>全部姓名</option>
             <option v-for="data in filterUserName" :value="data">
@@ -27,30 +27,20 @@
       </div>
     </div>
     <div class="mainTable">
-      <table>
-        <tr class="title">
-          <th>日期</th>
-          <!-- <th>部門</th> -->
-          <th>姓名</th>
-          <th>上班</th>
-          <th>下班</th>
-        </tr>
-        <tr v-for="data in selectUserInformation">
-          <td>{{ data.date }}</td>
-          <td>{{ data.username }}</td>
-          <td>{{ data.inTime }}</td>
-          <td>{{ data.outTime }}</td>
-        </tr>
-      </table>
+		  <vxe-table :data="selectTableData" class="tableInfo" emptyText="no data">
+		    <vxe-column v-for="(data, index) of tableTitle"  :field="data.field" :title="data.title"></vxe-column>
+		  </vxe-table>      
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
 import Sidebar from "./baseCopmponents/Sidebar.vue"
 import Navbar from "./baseCopmponents/Navbar.vue"
+import axios from "axios"
 
 export default {
+	name: 'TableComponent',
   data() {
     return {
       date: [],
@@ -59,60 +49,39 @@ export default {
       filterUserName: [],
       selectData: "全部",
       selectName: "全部",
-    };
+			tableTitle: [
+				{field:"date", title:"日期"},  		
+				{field:"username", title:"姓名"},
+				{field:"inTime", title:"上班"},
+				{field:"outTime", title:"下班"},	  		
+			], 
+			tableData: []    
+   	};
   },
   components: {
   	Sidebar,
   	Navbar
   },
-  computed: {
-    userInformation() {
-      // console.log(this.$store.state.userInformation);
-      for (let i = 0; i < this.$store.state.userInformation.length; i++) {
-        this.date.push(this.$store.state.userInformation[i].date);
-      }
-      // console.log(this.date);
-      const filteredArray = this.date.filter(
-        (ele, pos) => this.date.indexOf(ele) == pos
-      );
-      this.filterDate = filteredArray.sort();
-      // console.log(filteredArray);
-      // const obj = Object.assign({}, filteredArray.sort());
-      // // console.log(obj);
-      // this.filterDate = obj;
 
-      for (let i = 0; i < this.$store.state.userInformation.length; i++) {
-        this.username.push(this.$store.state.userInformation[i].username);
-      }
-      // console.log(this.username);
-      const filteredName = this.username.filter(
-        (ele, pos) => this.username.indexOf(ele) == pos
-      );
-      // console.log(filteredName);
-      this.filterUserName = filteredName;
-      // const objName = Object.assign({}, filteredName);
-      // // console.log(objName);
-      // this.filterUserName = objName;
-      return this.$store.state.userInformation;
-    },
-    selectUserInformation() {
+  computed: {
+    selectTableData() {
       let vm = this;
       let result;
 
       if (vm.selectData == "全部" && vm.selectName == "全部") {
-        result = vm.userInformation.filter((item) => {
+        result = vm.tableData.filter((item) => {
           return item;
         });
       } else if (vm.selectData !== "全部" && vm.selectName == "全部") {
-        result = vm.userInformation.filter((item) => {
+        result = vm.tableData.filter((item) => {
           return item.date == vm.selectData;
         });
       } else if (vm.selectName !== "全部" && vm.selectData == "全部") {
-        result = vm.userInformation.filter((item) => {
+        result = vm.tableData.filter((item) => {
           return item.username == vm.selectName;
         });
       } else {
-        result = vm.userInformation.filter((item) => {
+        result = vm.tableData.filter((item) => {
           return item.date == vm.selectData && item.username == vm.selectName;
         });
       }
@@ -122,7 +91,38 @@ export default {
   methods: {
 
   },
-  mounted() {
+  async mounted() {
+  	let postData = {
+  		username: this.$store.state.userInformation.username,
+  		status: this.$store.state.userInformation.status
+  	}
+  	let {data} = await axios.post("http://34.125.253.73:8080/search", postData)
+  	this.tableData = data.ReturnData 
+
+  	// set option in sort
+  	// set date option
+    for (let i = 0; i < this.tableData.length; i++) {
+      this.date.push(this.tableData[i].date);
+    }
+
+    // console.log(this.date);
+    const filteredArray = this.date.filter(
+      (ele, pos) => this.date.indexOf(ele) == pos
+    );
+    this.filterDate = filteredArray.sort();
+
+    if(this.$store.state.userInformation.status == 1){
+	    // set name option
+	    for (let i = 0; i < this.tableData.length; i++) {
+	      this.username.push(this.tableData[i].username);
+	    }
+	    // console.log(this.username);
+	    const filteredName = this.username.filter(
+	      (ele, pos) => this.username.indexOf(ele) == pos
+	    );
+	    // console.log(filteredName);
+	    this.filterUserName = filteredName;
+    }
   },
 };
 </script>
@@ -155,7 +155,7 @@ export default {
   max-height: 468px;
   overflow: auto;
 }
-table {
+/*table {
   border: 0;
   border-collapse: collapse;
   border-radius: 8px;
@@ -175,5 +175,10 @@ td {
   text-align: center;
   padding: 8px;
   color: #757575;
+}*/
+
+.tableInfo{
+	height: 100%;
+	overflow-y: auto;
 }
 </style>

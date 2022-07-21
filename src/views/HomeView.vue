@@ -5,6 +5,7 @@ import HomeComponent from "../components/HomeComponent.vue";
 // import { ref } from 'vue';
 
 export default {
+	name: 'HomeView',
   components: {
     HomeComponent,
   },
