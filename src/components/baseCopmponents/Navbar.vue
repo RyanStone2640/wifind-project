@@ -1,8 +1,8 @@
 <template>
   <div class="topBar">
-    <button class="logoutBtn" @click="logOut()">登出</button>
+  	<button class="logoutBtn" @click="logOut()">登出</button>
   </div>
-  <br />	
+  <br/>	
 </template>
 <script type="text/javascript">
 	export default {
@@ -28,9 +28,6 @@
 .topBar {
   border-bottom: solid 2px #d9d9d9;
   text-align: right;
-  margin-top: -50px;
-  margin-left: -80px;
-  margin-right: -30px;
 }	
 
 .logoutBtn {
