@@ -1,13 +1,13 @@
 <template>
-	<Sidebar></Sidebar>
+  <Sidebar></Sidebar>
   <div class="rightBar">
-  	<Navbar></Navbar>
+    <Navbar></Navbar>
     <div class="container">
       <h2 class="nameBar">
         目前顯示： {{ $store.state.userInformation.username }} 出勤紀錄
       </h2>
       <div class="searchBar">
-        <p class="recordNumber">共 {{ tableData.length}} 筆紀錄</p>
+        <p class="recordNumber">共 {{ tableData.length }} 筆紀錄</p>
         <div class="searchInput">
           <div class="dropdown">
             <select class="btn btn-secondary p-1" v-model="selectData">
@@ -17,7 +17,10 @@
               </option>
             </select>
           </div>
-          <div class="dropdown"  v-show="$store.state.userInformation.status == 1" >
+          <div
+            class="dropdown"
+            v-show="$store.state.userInformation.status == 1"
+          >
             <select class="btn btn-secondary p-1" v-model="selectName">
               <option value="全部" selected>全部姓名</option>
               <option v-for="data in filterUserName" :value="data">
@@ -28,22 +31,29 @@
         </div>
       </div>
       <div class="mainTable">
-        <vxe-table :data="selectTableData" class="tableInfo" emptyText="no data">
-          <vxe-column v-for="(data, index) of tableTitle"  :field="data.field" :title="data.title"></vxe-column>
-        </vxe-table>      
+        <vxe-table
+          :data="selectTableData"
+          class="tableInfo"
+          emptyText="no data"
+        >
+          <vxe-column
+            v-for="(data, index) of tableTitle"
+            :field="data.field"
+            :title="data.title"
+          ></vxe-column>
+        </vxe-table>
       </div>
     </div>
-
-  </div> 
+  </div>
 </template>
 
 <script>
-import Sidebar from "./baseCopmponents/Sidebar.vue"
-import Navbar from "./baseCopmponents/Navbar.vue"
-import axios from "axios"
+import Sidebar from "./baseCopmponents/Sidebar.vue";
+import Navbar from "./baseCopmponents/Navbar.vue";
+import axios from "axios";
 
 export default {
-	name: 'TableComponent',
+  name: "TableComponent",
   data() {
     return {
       date: [],
@@ -52,18 +62,18 @@ export default {
       filterUserName: [],
       selectData: "全部",
       selectName: "全部",
-			tableTitle: [
-				{field:"date", title:"日期"},  		
-				{field:"username", title:"姓名"},
-				{field:"inTime", title:"上班"},
-				{field:"outTime", title:"下班"},	  		
-			], 
-			tableData: []    
-   	};
+      tableTitle: [
+        { field: "date", title: "日期" },
+        { field: "username", title: "姓名" },
+        { field: "inTime", title: "上班" },
+        { field: "outTime", title: "下班" },
+      ],
+      tableData: [],
+    };
   },
   components: {
-  	Sidebar,
-  	Navbar
+    Sidebar,
+    Navbar,
   },
 
   computed: {
@@ -91,19 +101,20 @@ export default {
       return result;
     },
   },
-  methods: {
-
-  },
+  methods: {},
   async mounted() {
-  	let postData = {
-  		username: this.$store.state.userInformation.username,
-  		status: this.$store.state.userInformation.status
-  	}
-  	let {data} = await axios.post("http://34.125.253.73:8080/search", postData)
-  	this.tableData = data.ReturnData 
+    let postData = {
+      username: this.$store.state.userInformation.username,
+      status: this.$store.state.userInformation.status,
+    };
+    let { data } = await axios.post(
+      "http://34.125.253.73:8080/search",
+      postData
+    );
+    this.tableData = data.ReturnData;
 
-  	// set option in sort
-  	// set date option
+    // set option in sort
+    // set date option
     for (let i = 0; i < this.tableData.length; i++) {
       this.date.push(this.tableData[i].date);
     }
@@ -114,17 +125,17 @@ export default {
     );
     this.filterDate = filteredArray.sort();
 
-    if(this.$store.state.userInformation.status == 1){
-	    // set name option
-	    for (let i = 0; i < this.tableData.length; i++) {
-	      this.username.push(this.tableData[i].username);
-	    }
-	    // console.log(this.username);
-	    const filteredName = this.username.filter(
-	      (ele, pos) => this.username.indexOf(ele) == pos
-	    );
-	    // console.log(filteredName);
-	    this.filterUserName = filteredName;
+    if (this.$store.state.userInformation.status == 1) {
+      // set name option
+      for (let i = 0; i < this.tableData.length; i++) {
+        this.username.push(this.tableData[i].username);
+      }
+      // console.log(this.username);
+      const filteredName = this.username.filter(
+        (ele, pos) => this.username.indexOf(ele) == pos
+      );
+      // console.log(filteredName);
+      this.filterUserName = filteredName;
     }
   },
 };
@@ -137,8 +148,10 @@ export default {
   width: calc(100% - 300px);
   margin-left: 0;
   padding-right: 0;
+  border-left: solid 2px #d9d9d9;
+  height: 100%;
 }
-.container{
+.container {
   padding: 0 3rem 0 3rem;
 }
 .nameBar {
@@ -183,8 +196,8 @@ td {
   color: #757575;
 }*/
 
-.tableInfo{
-	height: 100%;
-	overflow-y: auto;
+.tableInfo {
+  height: 100%;
+  overflow-y: auto;
 }
 </style>
