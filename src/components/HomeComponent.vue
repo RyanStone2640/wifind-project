@@ -86,18 +86,17 @@ export default {
         return false;
       } 
       else {
-        let {data} = await axios.post("http://34.125.253.73:8080/login", userData)
         try{
-	        if(data.ReturnData[0].status == 1){
-		        alert(`您好，${data.ReturnData[0].username}`);
-		        this.$store.commit("addUserInformation",data.ReturnData[0]);
-		        return this.$router.push("/table");        	
-	        }
+        	let {data} = await axios.post("http://34.125.253.73:8080/login", userData)
+	        alert(`您好，${data.ReturnData[0].username}`);
+	        this.$store.commit("addUserInformation",data.ReturnData[0]);
+	        return this.$router.push("/table");        	
         }
         catch(err){
-	        console.log(err);
-	        alert("錯誤的帳號或密碼!!");
-	        return this.$router.push("/");        	
+       	  console.log(err);
+        	alert("錯誤的帳號或密碼!!");
+        	this.password = ""
+        	return this.$router.push("/");      	
         }
       }
     },

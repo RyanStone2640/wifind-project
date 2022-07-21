@@ -40,6 +40,7 @@ import Navbar from "./baseCopmponents/Navbar.vue"
 import axios from "axios"
 
 export default {
+	name: 'TableComponent',
   data() {
     return {
       date: [],

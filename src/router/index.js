@@ -12,7 +12,10 @@ const routes = [
   {
     path: '/table',
     name:'table',
-    component:TableView
+    component:TableView,
+	  meta: { 
+	    keepAlive: true, 
+	   }     
   },
   {
     path: '/chart',
