@@ -3,7 +3,7 @@
     <div class="wifindText">WIFind 打卡系統</div>
     <div class="loginBar">
       <form>
-        <span class="spanText">員工編號test</span>
+        <span class="spanText">員工編號</span>
         <input
           type="text"
           class="inputText"
