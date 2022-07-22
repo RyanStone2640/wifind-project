@@ -36,10 +36,14 @@
     margin-bottom: 10px;
     margin-right: 10px;
     border: solid 1px #d9d9d9;
-    background-color: #f1f7ff;
+    background-color: #5891e5;
+    transform: translateX(-50%);
+    color: white;
+    cursor: pointer;
+    transition: 0.4s;
     &:hover{
       color: white;
-      background-color: rgb(37, 106, 185);
+      background-color: #2d5ea8;
     }
   }
 }

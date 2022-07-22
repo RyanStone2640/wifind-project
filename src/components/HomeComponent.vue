@@ -3,22 +3,24 @@
     <div class="wifindText">WIFind 打卡系統</div>
     <div class="loginBar">
       <form>
-        <span class="spanText">員工編號</span>
+        <label class="spanText" for="account">&emsp;&emsp;帳號</label>
         <input
           type="text"
           class="inputText"
           size="30"
           v-model="code"
+          id="account"
           v-bind:class="{ 'is-invalid': codeError }"
         />
         <div class="invalid-feedback">{{ codeErrMsg }}</div>
         <br />
-        <span class="spanText">&emsp;&emsp;密碼</span>
+        <label class="spanText" for="password">&emsp;&emsp;密碼</label>
         <input
           type="password"
           class="inputText"
           size="30"
           v-model="password"
+          id="password"
           v-bind:class="{ 'is-invalid': passwordError }"
         />
         <div class="invalid-feedback">{{ passwordErrMsg }}</div>
@@ -153,5 +155,3 @@ export default {
   }
 }
 </style>
-
-<script setup></script>

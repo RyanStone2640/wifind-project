@@ -27,7 +27,9 @@
 export default {
   name: "Sidebar",
   data() {
-    return {};
+    return {
+      isActive: true,
+    };
   },
   computed: {},
   mounted() {},
@@ -49,9 +51,11 @@ export default {
   // border-right: solid 2px #d9d9d9;
   position: absolute;
   padding-top: 36px;
+  // background-color: rgb(28, 73, 157);
+   margin-bottom: 0px;
   .wifindText {
     margin-left: 30px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     font-size: 32px;
     font-weight: 600;
     color: #5891e5;
@@ -71,16 +75,24 @@ export default {
     width: 100%;
     padding: 20px;
     border: solid 2px #d9d9d9;
+    background-color: #fff;
+    color: #5891e5;
     border-right: none;
+    transition: 0.4s;
     &:hover {
       color: #fff;
       background-color: #5891e5;
+      // transform: 3s;
     }
+    &:not(:last-child){
+      border-bottom: none;
+    }
+  }
+  .active {
+    color: #fff;
+    background-color: #5891e5;
+    // border: solid 2px #1a4692;
   }
 }
 
-.active {
-  color: #fff;
-  background-color: #5891e5;
-}
 </style>

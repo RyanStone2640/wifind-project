@@ -1,8 +1,6 @@
 <template>
   <!-- overall -->
-  <div class="content-box overall-box">
-    <p class="title"><strong>總覽</strong></p>
-    <hr/>
+  <div class="overall-box">
     <div class="overall d-md-flex justify-content-around">
     	<template v-for="item of data">
 	      <div class="overall-item">
@@ -30,6 +28,9 @@
 .overall-box{
   width: auto;
   height: auto;
+	.title{
+		color: #5891e5;
+	}
   .selectInfo{
   	width: 100px;
   	height: 38px;
