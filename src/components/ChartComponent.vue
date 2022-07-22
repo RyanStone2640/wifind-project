@@ -6,11 +6,13 @@
       <!-- overall -->
       <Overall :parent-data="userAttendanceData"></Overall>
 
+      <hr/>
       <!-- chart -->
-      <div class="content-box overall-box chartContainer">
+      <div class="chartContainer">
         <v-chart class="chartHeight" :option="barchart" autoresize />
       </div>
-      <div class="content-box overall-box chartContainer">
+      <hr/>
+      <div class="chartContainer">
         <v-chart class="chartHeight" :option="piechart" autoresize />
       </div>
     </div>
@@ -74,7 +76,7 @@ const barchart = ref({
       data: [5, 2, 7, 5, 5, 5, 2, 7, 5, 5],
       type: "bar",
       itemStyle: {
-        color: "#558ABA",
+        color: "#5891e5",
       },
     },
   ],
@@ -158,7 +160,7 @@ const userAttendanceData = ref([
   border-left: solid 2px #d9d9d9;
 }
 .container {
-  padding: 0 3rem;
+  padding: 2rem 3rem;
   height: 100%;
 }
 

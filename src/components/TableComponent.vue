@@ -171,7 +171,7 @@ export default {
 }
 .mainTable {
   border: solid 1px black;
-  max-height: 468px;
+  max-height: 70vh;
   overflow: auto;
 }
 /*table {
@@ -197,7 +197,8 @@ td {
 }*/
 
 .tableInfo {
-  height: 100%;
+  height: auto;
+  max-height: 100%;
   overflow-y: auto;
 }
 </style>
