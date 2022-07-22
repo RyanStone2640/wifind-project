@@ -8,6 +8,16 @@
       </h2>
       <div class="searchBar">
         <p class="recordNumber">共 {{ tableData.length }} 筆紀錄</p>
+        <vxe-toolbar>
+          <template v-slot:buttons>
+            <vxe-input
+              clearable
+              v-model="filterName"
+              type="search"
+              placeholder="搜尋日期與性名"
+            ></vxe-input>
+          </template>
+        </vxe-toolbar>
         <div class="searchInput">
           <div class="dropdown">
             <select class="btn btn-secondary p-1" v-model="selectData">
@@ -30,6 +40,7 @@
           </div>
         </div>
       </div>
+
       <div class="mainTable">
         <vxe-table
           :data="selectTableData"
@@ -40,6 +51,7 @@
             v-for="(data, index) of tableTitle"
             :field="data.field"
             :title="data.title"
+            type="html"
           ></vxe-column>
         </vxe-table>
       </div>
@@ -51,6 +63,7 @@
 import Sidebar from "./baseCopmponents/Sidebar.vue";
 import Navbar from "./baseCopmponents/Navbar.vue";
 import axios from "axios";
+import XEUtils from "xe-utils";
 
 export default {
   name: "TableComponent",
@@ -69,6 +82,7 @@ export default {
         { field: "outTime", title: "下班" },
       ],
       tableData: [],
+      filterName: "",
     };
   },
   components: {
@@ -96,6 +110,30 @@ export default {
       } else {
         result = vm.tableData.filter((item) => {
           return item.date == vm.selectData && item.username == vm.selectName;
+        });
+      }
+
+      //vxe-table input搜尋功能
+      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase();
+      if (filterName) {
+        const filterRE = new RegExp(filterName, "gi");
+
+        const searchProps = ["date", "username"]; //只搜尋日期跟姓名
+        const rest = this.tableData.filter((item) =>
+          searchProps.some(
+            (key) =>
+              XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1
+          )
+        );
+        return rest.map((row) => {
+          const item = Object.assign({}, row);
+          searchProps.forEach((key) => {
+            item[key] = XEUtils.toString(item[key]).replace(
+              filterRE,
+              (match) => `<span class="keyword-lighten">${match}</span>`
+            );
+          });
+          return item;
         });
       }
       return result;
@@ -165,6 +203,7 @@ export default {
   align-items: baseline;
   margin-top: 26px;
 }
+
 .dropdown {
   display: inline-block;
   margin-left: 15px;
@@ -174,27 +213,6 @@ export default {
   max-height: 70vh;
   overflow: auto;
 }
-/*table {
-  border: 0;
-  border-collapse: collapse;
-  border-radius: 8px;
-  width: 100%;
-}
-.title {
-  position: sticky;
-  top: 0;
-}
-th {
-  background-color: #f1f7ff;
-  border: solid 1px black;
-  padding: 16px 8px;
-}
-td {
-  border: solid 1px black;
-  text-align: center;
-  padding: 8px;
-  color: #757575;
-}*/
 
 .tableInfo {
   height: auto;
