@@ -36,5 +36,9 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
-createApp(App).use(router).use(store).component('v-chart', ECharts).use(VXETable)
+// datepicker
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+createApp(App).use(router).use(store).component('v-chart', ECharts).use(VXETable).component('Datepicker', Datepicker)
 .mount("#app");
