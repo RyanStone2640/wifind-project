@@ -3,14 +3,21 @@
   <div class="rightBar">
     <Navbar></Navbar>
     <div class="container">
-			<div class="content-box filter-box">
-				<p class="title"><strong>查看出缺勤狀況</strong></p> 	  	
-				<hr/> 		 	
-				<div class="d-flex mt-2 flex-wrap">
-			  	<Datepicker class="datepicker mb-2 me-2 w-auto" v-model="date" range fixedStart/>
-			  	<button class="confirm-btn btn" @click="search">搜尋</button>
-				</div>
-			</div>  
+	<div class="content-box filter-box">
+		<p class="title"><strong>查看出勤狀態</strong></p> 	  	
+		<hr/>
+		<div class="d-flex flex-wrap" v-if="store.state.userInformation.status == 1">
+	  	<select class="selectInfo me-2" v-model="staff">
+				<option v-for="(data, index) of selectStaff" :value="data.item">
+					{{ data.name }}
+				</option>	      	 	
+	  	</select>		  	 	  	  	
+		</div> 		 	
+		<div class="d-flex mt-2 flex-wrap">
+	  	<Datepicker class="datepicker mb-2 me-2 w-auto" v-model="date" range/>
+	  	<button class="confirm-btn btn btn-height" @click="search">搜尋</button>
+		</div>
+	</div>
 			<hr/>  	
       <!-- overall -->
       <Overall :parent-data="userAttendanceData"></Overall>
@@ -55,6 +62,15 @@ watch(date, (newVal, oldVal) => { //  set date to yyyy-mm-dd
 		date.value[i] = newVal[i].toISOString().split('T')[0] 
 	}
 });
+
+const selectStaff = ref([])
+const staff = ref("")
+for(let i = 0; i < store.state.filterUserName.length; i++){
+	selectStaff.value.push({
+		name: store.state.filterUserName[i],
+		item: store.state.filterUserName[i]
+	})
+}
 // =========================================================================
 // overall
 const userAttendanceData = ref([
@@ -128,8 +144,9 @@ const piechart = ref({
     {
       name: "本月整體出勤狀況",
       type: "pie",
-      radius: "55%",
+      radius: ["0%", "80%"],
       center: ["50%", "60%"],
+      top: "0",
       data: [
         { value: 335, name: "正常到班" },
         { value: 310, name: "遲到數" },
@@ -152,7 +169,7 @@ const search = async()=>{
 	let postData = {
 		enddate: date.value[1],
 		startdate: date.value[0],
-		username: store.state.userInformation.username
+		username: selectStaff.value.length == 0 ? store.state.userInformation.username : staff.value 
 	}
 	try{
 		barchart.value.xAxis.data = [];
@@ -190,7 +207,21 @@ const search = async()=>{
 }
 .container {
   padding: 2rem 3rem;
-  height: 100%;
+	.content-box {
+	  margin: 1rem;
+	  padding: 1rem;
+	  .title {
+	    color: #558ABA;
+	    padding-left: 1rem;
+	  }
+	  .selectInfo {
+	    width: 100px;
+	    height: 38px;
+	    border-radius: 4px;
+	    border: 1px solid black;
+	    cursor: pointer;
+	  }	  
+	}  
 }
 
 .overall-box {

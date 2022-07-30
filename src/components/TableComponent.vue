@@ -174,6 +174,7 @@ export default {
       );
       // console.log(filteredName);
       this.filterUserName = filteredName;
+      this.$store.commit("addFilterUserName", filteredName)
     }
   },
 };

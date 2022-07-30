@@ -4,6 +4,7 @@ import createPersistedState from "vuex-persistedstate";
 export default createStore({
   state: {
     userInformation: {},
+    filterUserName: []
   },
   getters: {},
   mutations: {
@@ -12,7 +13,11 @@ export default createStore({
     },
     clearInformation(state) {
       state.userInformation = "";
+      state.filterUserName = ""
     },
+    addFilterUserName(state, data) {
+    	state.filterUserName = data;
+    }
   },
   actions: {},
   modules: {},

@@ -44,9 +44,9 @@ const router = createRouter({
 router.beforeEach(async function(to, from, next){
 
   if (to.path == '/chart'|| to.path == '/chart/' || to.path == '/table' || to.path == '/table/') {
-  	if(store.userInformation == false){
+  	if(Object.keys(store.state.userInformation).length == 0 ){
   		alert("尚未登入!")
-			 next('/')
+			next('/')
   	}
   	else{
   		next()
