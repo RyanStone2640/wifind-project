@@ -7,7 +7,7 @@
         目前顯示： {{ $store.state.userInformation.username }} 出勤紀錄
       </h2>
       <div class="searchBar">
-        <p class="recordNumber">共 {{ tableData.length }} 筆紀錄</p>
+        <p class="recordNumber">共 {{ selectTableData.length }} 筆紀錄</p>
         <vxe-toolbar>
           <template v-slot:buttons>
             <vxe-input

@@ -3,21 +3,29 @@
   <div class="rightBar">
     <Navbar></Navbar>
     <div class="container">
+			<div class="content-box filter-box">
+				<p class="title"><strong>查看出缺勤狀況</strong></p> 	  	
+				<hr/> 		 	
+				<div class="d-flex mt-2 flex-wrap">
+			  	<Datepicker class="datepicker mb-2 me-2 w-auto" v-model="date" range fixedStart/>
+			  	<button class="confirm-btn btn" @click="search">搜尋</button>
+				</div>
+			</div>  
+			<hr/>  	
       <!-- overall -->
       <Overall :parent-data="userAttendanceData"></Overall>
 
-      <hr/>
       <!-- chart -->
+      <hr/>
+      <div class="chartContainer">
+        <v-chart class="chartHeight" :option="piechart" autoresize />
+      </div>      
       <div class="chartContainer">
         <v-chart class="chartHeight" :option="barchart" autoresize />
       </div>
       <hr/>
-      <div class="chartContainer">
-        <v-chart class="chartHeight" :option="piechart" autoresize />
-      </div>
     </div>
   </div>
-  <!-- <div>{{ userInformation }}</div> -->
 </template>
 
 <script setup>
@@ -26,27 +34,46 @@ import Sidebar from "./baseCopmponents/Sidebar.vue";
 import Navbar from "./baseCopmponents/Navbar.vue";
 import Overall from "./baseCopmponents/overall.vue";
 
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-
+import axios from "axios"
+// ======================================================================
 // vuex
 const store = useStore();
 // vue-router
 const router = useRouter();
-
-const date = ref([]);
-
-const filterDate = ref([]);
-
-const username = ref([]);
-
-const filterUserName = ref([]);
-
-const selectData = ref("全部");
-
-const selectName = ref("全部");
-
+// ======================================================================
+const date = ref(""); 	// date
+onMounted(() => {
+  const startDate = new Date(2022, 6, 2);
+  const endDate = new Date(2022, 6, 32)
+  date.value = [startDate, endDate]	
+})
+watch(date, (newVal, oldVal) => { //  set date to yyyy-mm-dd
+	for(let i = 0; i <= date.value.length - 1; i++){
+		date.value[i] = newVal[i].toISOString().split('T')[0] 
+	}
+});
+// =========================================================================
+// overall
+const userAttendanceData = ref([
+  {
+    title: "出勤率",
+    number: "98%",
+    color: "#558ABA",
+  },
+  {
+    title: "遲到率",
+    number: "5%",
+    color: "#1AAF68",
+  },
+  {
+    title: "缺席率",
+    number: "5%",
+    color: "#1AAF68",
+  },
+]);
 // chart
 const barchart = ref({
   title: {
@@ -73,7 +100,7 @@ const barchart = ref({
   series: [
     {
       name: "到班時數",
-      data: [5, 2, 7, 5, 5, 5, 2, 7, 5, 5],
+      data: [],
       type: "bar",
       itemStyle: {
         color: "#5891e5",
@@ -108,46 +135,41 @@ const piechart = ref({
         { value: 310, name: "遲到數" },
         { value: 234, name: "缺勤" },
       ],
-      itemStyle: {
-        normal: {
-          label: {
-            show: true,
-            position: "inner",
-            formatter: "{d}%",
-          },
-          labelLine: {
-            show: false,
-          },
-        },
+      label: {
+        show: true,
+        position: "inner",
+        formatter: "{d}%",
+      },
+      labelLine: {
+        show: false,
       },
     },
   ],
 });
-onMounted(() => {});
+const search = async()=>{
+	let href = 'http://34.125.253.73:8080/worktime'
+	// console.log(date.value)
+	let postData = {
+		enddate: date.value[1],
+		startdate: date.value[0],
+		username: store.state.userInformation.username
+	}
+	try{
+		barchart.value.xAxis.data = [];
+		barchart.value.series[0].data = []
+		let { data } = await axios.post(href, postData)
+		// console.log(data)
+		for(let i = 0; i < data.length; i++){
+			barchart.value.xAxis.data.push(data[i].date)
+			barchart.value.series[0].data.push(data[i].worktime)			
+		}
+	}
+	catch(e){
+		console.log(e)
+		alert("資料錯誤，請再搜尋一次")
+	}
 
-// overall
-const userAttendanceData = ref([
-  {
-    title: "出勤率",
-    number: "98%",
-    color: "#558ABA",
-  },
-  {
-    title: "遲到率",
-    number: "5%",
-    color: "#1AAF68",
-  },
-  {
-    title: "缺席率",
-    number: "5%",
-    color: "#1AAF68",
-  },
-  {
-    title: "請假率",
-    number: "5%",
-    color: "#1AAF68",
-  },
-]);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -158,6 +180,13 @@ const userAttendanceData = ref([
   margin-left: 0;
   padding-right: 0;
   border-left: solid 2px #d9d9d9;
+  .confirm-btn {
+  	border-style: none;
+  	background-color: #558ABA;
+  	color: #fff;  	
+  	height: 38px;
+
+  }  
 }
 .container {
   padding: 2rem 3rem;
