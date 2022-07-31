@@ -76,17 +76,17 @@ for(let i = 0; i < store.state.filterUserName.length; i++){
 const userAttendanceData = ref([
   {
     title: "出勤率",
-    number: "98%",
+    number: "",
     color: "#558ABA",
   },
   {
     title: "遲到率",
-    number: "5%",
+    number: "",
     color: "#1AAF68",
   },
   {
     title: "缺席率",
-    number: "5%",
+    number: "",
     color: "#1AAF68",
   },
 ]);
@@ -148,9 +148,9 @@ const piechart = ref({
       center: ["50%", "60%"],
       top: "0",
       data: [
-        { value: 335, name: "正常到班" },
-        { value: 310, name: "遲到數" },
-        { value: 234, name: "缺勤" },
+        { value: '', name: "正常到班" },
+        { value: '', name: "遲到數" },
+        { value: '', name: "缺勤" },
       ],
       label: {
         show: true,
@@ -164,7 +164,9 @@ const piechart = ref({
   ],
 });
 const search = async()=>{
+	// barChart==================================================
 	let href = 'http://34.125.253.73:8080/worktime'
+	let overallHref = 'http://34.125.253.73:8080/record'
 	// console.log(date.value)
 	let postData = {
 		enddate: date.value[1],
@@ -172,14 +174,39 @@ const search = async()=>{
 		username: selectStaff.value.length == 0 ? store.state.userInformation.username : staff.value 
 	}
 	try{
+		// claer data=========================================================================
+		for(let i = 0; i < userAttendanceData.value.length; i++){
+			userAttendanceData.value[i].number = ""
+		}		
 		barchart.value.xAxis.data = [];
 		barchart.value.series[0].data = []
-		let { data } = await axios.post(href, postData)
-		// console.log(data)
+		for(let i = 0; i < piechart.value.series[0].data.length; i++){
+			piechart.value.series[0].data[i].value = ''
+		}
+		// get axios data=========================================================================
+		let [overAlldata, data] = await Promise.all([axios.post(overallHref, postData), await axios.post(href, postData)]);	
+
+		// sign new value for axios data object
+		overAlldata = overAlldata.data
+		data = data.data
+
+		//  set value
+		let sum = overAlldata.absent + overAlldata.present
+		userAttendanceData.value[0].number = `${Math.round(overAlldata.present/sum*100)}%`;	
+		userAttendanceData.value[1].number = `${Math.round(overAlldata.late/sum*100)}%`;
+		userAttendanceData.value[2].number = `${Math.round(overAlldata.absent/sum*100)}%`;
+
+		piechart.value.series[0].data[0].value = overAlldata.present
+		piechart.value.series[0].data[1].value = overAlldata.late
+		piechart.value.series[0].data[2].value = overAlldata.absent		
+
 		for(let i = 0; i < data.length; i++){
 			barchart.value.xAxis.data.push(data[i].date)
 			barchart.value.series[0].data.push(data[i].worktime)			
 		}
+
+
+
 	}
 	catch(e){
 		console.log(e)
