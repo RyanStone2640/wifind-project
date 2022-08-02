@@ -40,7 +40,8 @@
           </div>
         </div>
       </div>
-
+			
+			<h2>員工出勤表格</h2>
       <div class="mainTable">
         <vxe-table
           :data="selectTableData"
@@ -55,6 +56,24 @@
           ></vxe-column>
         </vxe-table>
       </div>
+      
+
+      <h2 class="mt-2">員工休息時數表格</h2>
+      <div class="mainTable">
+        <vxe-table
+          :data="selectRestTableData"
+          class="tableInfo"
+          emptyText="no data"
+        >
+          <vxe-column
+            v-for="(data, index) of restTableTitle"
+            :field="data.field"
+            :title="data.title"
+            type="html"
+          ></vxe-column>
+        </vxe-table>
+      </div>
+
     </div>
   </div>
 </template>
