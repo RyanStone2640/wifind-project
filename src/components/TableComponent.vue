@@ -102,6 +102,14 @@ export default {
       ],
       tableData: [],
       filterName: "",
+      restTableTitle: [
+        { field: "date", title: "日期" },
+        { field: "username", title: "姓名" },
+        { field: "starttime", title: "開始" },
+        { field: "endtime", title: "結束" },
+        { field: "spendtime", title: "休息" },
+      ],
+      restTableData: []
     };
   },
   components: {
@@ -139,6 +147,53 @@ export default {
 
         const searchProps = ["date", "username"]; //只搜尋日期跟姓名
         const rest = this.tableData.filter((item) =>
+          searchProps.some(
+            (key) =>
+              XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1
+          )
+        );
+        return rest.map((row) => {
+          const item = Object.assign({}, row);
+          searchProps.forEach((key) => {
+            item[key] = XEUtils.toString(item[key]).replace(
+              filterRE,
+              (match) => `<span class="keyword-lighten">${match}</span>`
+            );
+          });
+          return item;
+        });
+      }
+      return result;
+    },
+    selectRestTableData() {
+      let vm = this;
+      let result;
+
+      if (vm.selectData == "全部" && vm.selectName == "全部") {
+        result = vm.restTableData.filter((item) => {
+          return item;
+        });
+      } else if (vm.selectData !== "全部" && vm.selectName == "全部") {
+        result = vm.restTableData.filter((item) => {
+          return item.date == vm.selectData;
+        });
+      } else if (vm.selectName !== "全部" && vm.selectData == "全部") {
+        result = vm.restTableData.filter((item) => {
+          return item.username == vm.selectName;
+        });
+      } else {
+        result = vm.restTableData.filter((item) => {
+          return item.date == vm.selectData && item.username == vm.selectName;
+        });
+      }
+
+      //vxe-table input搜尋功能
+      const filterName = XEUtils.toString(this.filterName).trim().toLowerCase();
+      if (filterName) {
+        const filterRE = new RegExp(filterName, "gi");
+
+        const searchProps = ["date", "username"]; //只搜尋日期跟姓名
+        const rest = this.restTableData.filter((item) =>
           searchProps.some(
             (key) =>
               XEUtils.toString(item[key]).toLowerCase().indexOf(filterName) > -1
@@ -195,6 +250,45 @@ export default {
       this.filterUserName = filteredName;
       this.$store.commit("addFilterUserName", filteredName)
     }
+    // Rest Table
+    {
+      let restPostData = {
+      username: this.$store.state.userInformation.username,
+      startdate : '2022-06-01',
+      enddate : '2022-07-30'
+      }
+      let {data} = await axios.post(
+        "http://34.125.253.73:8080/rest",
+        restPostData
+      )
+      this.restTableData = data
+      this.restTableData.username = 'howard'
+      console.log(this.restTableData.username)
+
+      for (let i = 0; i < this.restTableData.length; i++) {
+        this.date.push(this.restTableData[i].date);
+      }
+
+      // console.log(this.date);
+      const filteredArray = this.date.filter(
+        (ele, pos) => this.date.indexOf(ele) == pos
+      );
+      this.filterDate = filteredArray.sort();
+
+      if (this.$store.state.userInformation.status == 1) {
+        // set name option
+        for (let i = 0; i < this.restTableData.length; i++) {
+          this.username.push(this.restTableData[i].username);
+        }
+        // console.log(this.username);
+        const filteredName = this.username.filter(
+          (ele, pos) => this.username.indexOf(ele) == pos
+        );
+        // console.log(filteredName);
+        this.filterUserName = filteredName;
+        this.$store.commit("addFilterUserName", filteredName)
+      }
+    }
   },
 };
 </script>
@@ -207,10 +301,12 @@ export default {
   margin-left: 0;
   padding-right: 0;
   border-left: solid 2px #d9d9d9;
-  height: 100%;
+  /* height: 100%; */
+  height: auto;
 }
 .container {
-  padding: 0 3rem 0 3rem;
+  height: 100%;
+  padding: 0 3rem 3rem 3rem;
 }
 .nameBar {
   font-size: 20px;
@@ -232,6 +328,8 @@ export default {
   border: solid 1px black;
   max-height: 70vh;
   overflow: auto;
+  /* padding-bottom: 3rem; */
+  margin-bottom: 3rem;
 }
 
 .tableInfo {
